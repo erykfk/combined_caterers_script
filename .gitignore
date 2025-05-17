@@ -5,8 +5,7 @@ node_modules/
 .env
 
 # Google API credentials
-credentials.json
-token.json
+service-account.json
 
 # Logs
 *.log
@@ -17,3 +16,4 @@ pids
 *.pid
 *.seed
 *.pid.lock 
+credentials.json

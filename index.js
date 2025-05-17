@@ -1,14 +1,13 @@
 const { google } = require('googleapis');
-const { authenticate } = require('@google-cloud/local-auth');
 const path = require('path');
 require('dotenv').config();
 
-// If modifying these scopes, delete token.json.
+// If modifying these scopes, update the service account permissions in Google Cloud Console
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 
 /**
  * Creates an event on Google Calendar
- * @param {Object} auth The authenticated Google OAuth2 client
+ * @param {Object} auth The authenticated Google client
  * @param {Object} eventDetails The event details
  */
 async function createCalendarEvent(auth, eventDetails) {
@@ -33,11 +32,14 @@ async function createCalendarEvent(auth, eventDetails) {
  */
 async function main() {
   try {
-    // Load client secrets from a local file
-    const auth = await authenticate({
-      keyfilePath: path.join(__dirname, 'credentials.json'),
+    // Load service account credentials
+    const auth = new google.auth.GoogleAuth({
+      keyFile: path.join(__dirname, 'service-account.json'),
       scopes: SCOPES,
     });
+
+    // Get the authenticated client
+    const authClient = await auth.getClient();
 
     // Example event details
     const eventDetails = {
@@ -53,7 +55,7 @@ async function main() {
       },
     };
 
-    await createCalendarEvent(auth, eventDetails);
+    await createCalendarEvent(authClient, eventDetails);
   } catch (error) {
     console.error('Error in main:', error);
   }
