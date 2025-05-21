@@ -15,7 +15,7 @@ async function createCalendarEvent(auth, eventDetails) {
   
   try {
     const event = await calendar.events.insert({
-      calendarId: 'primary',
+      calendarId: process.env.CALENDAR_ID || 'primary', // Use environment variable for calendar ID
       resource: eventDetails,
     });
     
